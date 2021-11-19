@@ -1,6 +1,6 @@
 # Workflows
 
-Reusable workflows for GitHub Actions.
+[Reusable workflows](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows) for GitHub Actions.
 
 ## Usage
 

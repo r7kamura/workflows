@@ -1,0 +1,14 @@
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ input.github-token || secrets.GITHUB_TOKEN }}

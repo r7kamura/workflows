@@ -1,0 +1,24 @@
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: chetan/git-restore-mtime-action@v1.1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/git/db/
+            ~/.cargo/registry/cache/
+            ~/.cargo/registry/index/
+            target/
+          key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+      - run: rustup component add clippy rustfmt
+      - uses: r7kamura/rust-problem-matchers@v1
+      - run: cargo fmt -- --check
+      - run: cargo build --all-features
+      - run: cargo clippy -- -D warnings
+      - run: cargo test --all-features

@@ -1,5 +1,22 @@
 on:
   workflow_call:
+    inputs:
+      build:
+        description: Whether to run `cargo build`
+        default: true
+        type: boolean
+      clippy:
+        description: Whether to run `cargo clippy`
+        default: true
+        type: boolean
+      fmt:
+        description: Whether to run `cargo fmt`
+        default: true
+        type: boolean
+      test:
+        description: Whether to run `cargo test`
+        default: true
+        type: boolean
 
 jobs:
   run:
@@ -16,9 +33,16 @@ jobs:
             ~/.cargo/registry/index/
             target/
           key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
-      - run: rustup component add clippy rustfmt
       - uses: r7kamura/rust-problem-matchers@v1
-      - run: cargo fmt -- --check
+      - run: |-
+          rustup component add rustfmt
+          cargo fmt -- --check
+        if: ${{ inputs.fmt }}
       - run: cargo build --all-features
-      - run: cargo clippy -- -D warnings
+        if: ${{ inputs.build }}
+      - run: |-
+          rustup component add clippy
+          cargo clippy -- -D warnings
+        if: ${{ inputs.clippy }}
       - run: cargo test --all-features
+        if: ${{ inputs.test }}

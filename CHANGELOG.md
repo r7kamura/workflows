@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.1
+
 ### Fixed
 
 - Fix bugs at github-release and rust-tag.

@@ -11,4 +11,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: softprops/action-gh-release@v1
         env:
-          GITHUB_TOKEN: ${{ input.github-token || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.github-token || secrets.GITHUB_TOKEN }}

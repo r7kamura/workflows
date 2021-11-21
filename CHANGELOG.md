@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix bugs at github-release and rust-tag.
+
 ## 0.1.0
 
 ### Added

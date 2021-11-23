@@ -34,15 +34,19 @@ jobs:
             target/
           key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
       - uses: r7kamura/rust-problem-matchers@v1
-      - run: |-
+      - name: cargo fmt
+        run: |-
           rustup component add rustfmt
           cargo fmt -- --check
         if: ${{ inputs.fmt }}
-      - run: cargo build --all-features
+      - name: cargo build
+        run: cargo build --all-features
         if: ${{ inputs.build }}
-      - run: |-
+      - name: cargo clippy
+        run: |-
           rustup component add clippy
           cargo clippy -- -D warnings
         if: ${{ inputs.clippy }}
-      - run: cargo test --all-features
+      - name: cargo test
+        run: cargo test --all-features
         if: ${{ inputs.test }}

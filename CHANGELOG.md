@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add workflow: ruby-rspec.
+
 ## 0.2.0 - 2021-11-26
 
 ### Added

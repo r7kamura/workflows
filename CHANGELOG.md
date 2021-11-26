@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 - 2021-11-26
+
 ### Added
 
 - Assign more friendly step names at rust-test workflow.

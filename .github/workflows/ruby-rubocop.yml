@@ -1,5 +1,5 @@
 on:
-  workflow-call:
+  workflow_call:
     inputs:
       ruby-version:
         type: string

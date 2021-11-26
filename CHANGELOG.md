@@ -5,6 +5,7 @@
 ### Added
 
 - Add workflow: ruby-rspec.
+- Add workflow: ruby-rubocop.
 
 ## 0.2.0 - 2021-11-26
 

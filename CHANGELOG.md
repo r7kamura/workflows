@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Temporarily stop building macOS build binary for CC error.
+
 ## 0.3.0 - 2021-12-18
 
 ### Added

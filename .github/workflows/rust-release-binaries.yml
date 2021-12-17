@@ -5,6 +5,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         target:
           # - x86_64-apple-darwin

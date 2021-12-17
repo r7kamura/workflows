@@ -4,7 +4,6 @@
 
 ### Changed
 
-- Temporarily stop building macOS build binary for CC error.
 - Add fail-fast option to rust-release-binaries.
 
 ## 0.3.0 - 2021-12-18

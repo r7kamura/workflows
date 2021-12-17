@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 - 2021-12-18
+
 ### Added
 
 - Add workflow: ruby-rspec.

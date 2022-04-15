@@ -1,0 +1,12 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    uses: r7kamura/workflows/.github/workflows/github-release.yml@main
+    secrets:
+      github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

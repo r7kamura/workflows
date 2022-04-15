@@ -1,0 +1,14 @@
+name: tag
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - CHANGELOG.md
+
+jobs:
+  tag:
+    uses: r7kamura/workflows/.github/workflows/changelog-tag.yml@main
+    secrets:
+      github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

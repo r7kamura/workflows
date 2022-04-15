@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add workflow: changelog-tag.
+
 ## 0.4.0 - 2022-04-15
 
 ### Changed

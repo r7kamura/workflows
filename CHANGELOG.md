@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add workflow: keep-main-version-branch.
+
 ## 0.5.0 - 2022-04-15
 
 ### Added

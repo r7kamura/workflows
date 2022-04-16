@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push HEAD to main version branch
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          branch_name=$(echo "${GITHUB_REF_NAME}" | sed -E "s/(v[0-9]+)\..+/\1/")
+          git switch --force-create "${branch_name}"
+          git push --force origin HEAD

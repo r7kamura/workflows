@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Refactor keep-main-version-branch workflow.
+
 ## 0.6.0 - 2022-04-16
 
 ### Added

@@ -6,6 +6,10 @@
 
 - Add workflow: changelog-tag-release.
 
+### Fixed
+
+- Fix error on changelog-tag if CHANGELOG.md doesn't exist.
+
 ## 0.6.1 - 2022-04-16
 
 ### Changed

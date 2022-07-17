@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          generate_release_notes: true
+      - name: Push HEAD to main version branch
+        run: |
+          branch_name=$(echo "${GITHUB_REF_NAME}" | sed -E "s/(v[0-9]+)\..+/\1/")
+          git push --force origin "HEAD:refs/heads/${branch_name}"

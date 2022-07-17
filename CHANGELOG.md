@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add workflow: release-action.
+
 ## 0.7.1 - 2022-05-20
 
 ## 0.7.0 - 2022-05-18

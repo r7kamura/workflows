@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix bug on chrome-extension-release: missing npm ci step.
+
 ## 0.9.0 - 2022-07-22
 
 ### Added

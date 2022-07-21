@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.0 - 2022-07-22
+
 ### Added
 
 - Add workflow: chrome-extension-release.

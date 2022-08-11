@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.1
+
 ### Fixed
 
 - Fix bug on chrome-extension-release: missing npm ci step.
@@ -83,4 +85,3 @@
 - Add workflow: rust-release-binaries.
 - Add workflow: rust-tag.
 - Add workflow: rust-test.
-

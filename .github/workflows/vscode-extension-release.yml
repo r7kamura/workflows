@@ -1,0 +1,29 @@
+on:
+  workflow_call:
+    secrets:
+      vsce-token:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run build
+      - uses: salsify/action-detect-and-tag-new-version@v2
+        id: tag-new-version
+        with:
+          version-command: cat package.json | jq -r .version
+      - uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          tag_name: ${{ steps.tag-new-version.outputs.tag }}
+        if: ${{ steps.tag-new-version.outputs.tag }}
+      - run: npx vsce publish --pat ${{ secrets.vsce-token }}
+        if: ${{ steps.tag-new-version.outputs.tag }}

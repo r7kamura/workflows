@@ -1,0 +1,13 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    - uses: actions/checkout@v3
+    - uses: softprops/action-gh-release@v1
+      with:
+        generate_release_notes: true

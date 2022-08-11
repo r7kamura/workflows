@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
-      - run: npm run build
+      - run: npm run compile
       - uses: salsify/action-detect-and-tag-new-version@v2
         id: tag-new-version
         with:

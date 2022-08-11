@@ -7,7 +7,9 @@ on:
 
 jobs:
   release:
-    - uses: actions/checkout@v3
-    - uses: softprops/action-gh-release@v1
-      with:
-        generate_release_notes: true
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true

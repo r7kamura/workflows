@@ -1,0 +1,34 @@
+on:
+  workflow_call:
+    secrets:
+      rubygems-org-api-key:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - id: tag-new-version
+        uses: salsify/action-detect-and-tag-new-version@v2
+        with:
+          version-command: cat lib/*/version.rb | grep VERSION | cut -d "'" -f 2
+      - if: ${{ steps.tag-new-version.outputs.tag }}
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 3.1
+      - if: ${{ steps.tag-new-version.outputs.tag }}
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          bundle exec rake release:rubygem_push
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.rubygems-org-api-key }}
+      - if: ${{ steps.tag-new-version.outputs.tag }}
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          tag_name: ${{ steps.tag-new-version.outputs.tag }}

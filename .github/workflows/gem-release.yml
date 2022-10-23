@@ -14,7 +14,9 @@ jobs:
       - id: tag-new-version
         uses: salsify/action-detect-and-tag-new-version@v2
         with:
-          version-command: cat lib/**/*/version.rb | grep VERSION | cut -d "'" -f 2
+          version-command: |
+            shopt -s globstar
+            cat lib/**/version.rb | grep VERSION | cut -d "'" -f 2
       - if: ${{ steps.tag-new-version.outputs.tag }}
         uses: ruby/setup-ruby@v1
         with:

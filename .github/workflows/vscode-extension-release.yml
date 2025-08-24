@@ -17,7 +17,7 @@ jobs:
           version-command: cat package.json | jq -r .version
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
         if: ${{ steps.tag-new-version.outputs.tag }}
       - run: npm ci
         if: ${{ steps.tag-new-version.outputs.tag }}

@@ -20,7 +20,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: 3.1
+          ruby-version: 3.2
       - if: ${{ steps.tag-new-version.outputs.tag }}
         run: |
           git config user.name "${GITHUB_ACTOR}"

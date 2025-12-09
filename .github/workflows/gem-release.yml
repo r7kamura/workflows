@@ -1,35 +1,31 @@
 on:
   workflow_call:
-    secrets:
-      rubygems-org-api-key:
-        required: true
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 2
-      - id: tag-new-version
+      - id: detect-new-version
         uses: salsify/action-detect-and-tag-new-version@v2
         with:
           version-command: |
             cat "$(find lib -name version.rb)" | grep VERSION | cut -d "'" -f 2
-      - if: ${{ steps.tag-new-version.outputs.tag }}
+      - if: ${{ steps.detect-new-version.outputs.tag }}
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: 3.2
-      - if: ${{ steps.tag-new-version.outputs.tag }}
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          bundle exec rake release:rubygem_push
-        env:
-          GEM_HOST_API_KEY: ${{ secrets.rubygems-org-api-key }}
-      - if: ${{ steps.tag-new-version.outputs.tag }}
+          ruby-version: ruby
+      - if: ${{ steps.detect-new-version.outputs.tag }}
+        uses: rubygems/release-gem@v1
+      - if: ${{ steps.detect-new-version.outputs.tag }}
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
-          tag_name: ${{ steps.tag-new-version.outputs.tag }}
+          tag_name: ${{ steps.detect-new-version.outputs.tag }}

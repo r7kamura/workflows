@@ -10,7 +10,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           generate_release_notes: true
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Push HEAD to main version branch
         run: |
           branch_name=$(echo "${GITHUB_REF_NAME}" | sed -E "s/(v[0-9]+)\..+/\1/")

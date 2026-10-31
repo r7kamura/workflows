@@ -1,5 +1,11 @@
 on:
   workflow_call:
+    inputs:
+      publish-gem:
+        description: Whether to publish the gem to RubyGems.org.
+        default: true
+        required: false
+        type: boolean
 
 permissions:
   contents: write
@@ -9,23 +15,39 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 2
       - id: new-version
-        uses: salsify/action-detect-and-tag-new-version@v2
-        with:
-          version-command: |
-            cat "$(find lib -name version.rb)" | grep VERSION | cut -d "'" -f 2
-      - if: ${{ steps.new-version.outputs.tag }}
+        run: |
+          version_file="$(find lib -name version.rb | head -n 1)"
+          extract_version() {
+            grep -m 1 -E 'VERSION[[:space:]]*=' | sed -E "s/.*VERSION[[:space:]]*=[[:space:]]*['\"]([^'\"]+)['\"].*/\1/"
+          }
+          current_version="$(extract_version < "$version_file")"
+          previous_version="$(git show "HEAD^:$version_file" 2>/dev/null | extract_version || true)"
+          echo "current-version=$current_version" >> "$GITHUB_OUTPUT"
+          echo "previous-version=$previous_version" >> "$GITHUB_OUTPUT"
+          if [ -z "$current_version" ] || [ "$current_version" = "$previous_version" ]; then
+            exit 0
+          fi
+          tag="v$current_version"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "Tag $tag already exists."
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' tag -a "$tag" -m "Released version $current_version"
+          git push origin "$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ruby
-      - if: ${{ steps.new-version.outputs.tag }}
+      - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
         uses: rubygems/release-gem@v1
       - if: ${{ steps.new-version.outputs.tag }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           tag_name: ${{ steps.new-version.outputs.tag }}

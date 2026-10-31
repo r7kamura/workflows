@@ -7,15 +7,16 @@ on:
         required: false
         type: boolean
 
-permissions:
-  contents: write
-  id-token: write
+permissions: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 2
       - id: new-version
@@ -40,14 +41,14 @@ jobs:
           git push origin "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1.336.0
         with:
           bundler-cache: true
           ruby-version: ruby
       - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
-        uses: rubygems/release-gem@v1
+        uses: rubygems/release-gem@v1.4.1
       - if: ${{ steps.new-version.outputs.tag }}
-        uses: softprops/action-gh-release@v3
-        with:
-          generate_release_notes: true
-          tag_name: ${{ steps.new-version.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.new-version.outputs.tag }}
+        run: gh release create "$TAG" --generate-notes

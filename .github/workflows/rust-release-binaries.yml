@@ -1,9 +1,13 @@
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -12,8 +16,10 @@ jobs:
           - x86_64-pc-windows-gnu
           - x86_64-unknown-linux-musl
     steps:
-      - uses: actions/checkout@v6
-      - uses: rust-build/rust-build.action@latest
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: rust-build/rust-build.action@v1.4.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUSTTARGET: ${{ matrix.target }}

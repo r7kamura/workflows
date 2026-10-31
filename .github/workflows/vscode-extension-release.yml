@@ -4,29 +4,58 @@ on:
       vsce-token:
         required: true
 
+permissions: {}
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: salsify/action-detect-and-tag-new-version@v2
-        id: tag-new-version
-        with:
-          version-command: cat package.json | jq -r .version
-      - uses: actions/setup-node@v3
+      - id: detect
+        env:
+          VERSION_COMMAND: jq -r .version package.json
+        run: |
+          current_version="$(sh -c "$VERSION_COMMAND")"
+          previous_version=""
+          if git rev-parse --verify --quiet HEAD^ > /dev/null; then
+            git worktree add --quiet --detach "$RUNNER_TEMP/previous" HEAD^
+            previous_version="$(cd "$RUNNER_TEMP/previous" && sh -c "$VERSION_COMMAND" || true)"
+            git worktree remove --force "$RUNNER_TEMP/previous"
+          fi
+          echo "Previous version: $previous_version"
+          echo "Current version: $current_version"
+          echo "previous-version=$previous_version" >> "$GITHUB_OUTPUT"
+          echo "current-version=$current_version" >> "$GITHUB_OUTPUT"
+          if [ -z "$current_version" ] || [ "$current_version" = "$previous_version" ]; then
+            exit 0
+          fi
+          tag="v$current_version"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "Tag $tag already exists."
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' tag -a "$tag" -m "Released version $current_version"
+          git push origin "refs/tags/$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - if: ${{ steps.detect.outputs.tag }}
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: 22
-        if: ${{ steps.tag-new-version.outputs.tag }}
-      - run: npm ci
-        if: ${{ steps.tag-new-version.outputs.tag }}
-      - run: npm run compile
-        if: ${{ steps.tag-new-version.outputs.tag }}
-      - uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          tag_name: ${{ steps.tag-new-version.outputs.tag }}
-        if: ${{ steps.tag-new-version.outputs.tag }}
-      - run: npx @vscode/vsce publish --pat ${{ secrets.vsce-token }}
-        if: ${{ steps.tag-new-version.outputs.tag }}
+          package-manager-cache: false
+      - if: ${{ steps.detect.outputs.tag }}
+        run: npm ci
+      - if: ${{ steps.detect.outputs.tag }}
+        run: npm run compile
+      - if: ${{ steps.detect.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.detect.outputs.tag }}
+        run: gh release create "$TAG" --generate-notes
+      - if: ${{ steps.detect.outputs.tag }}
+        env:
+          VSCE_PAT: ${{ secrets.vsce-token }}
+        run: npx @vscode/vsce publish

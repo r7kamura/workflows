@@ -3,17 +3,20 @@ on:
     inputs:
       ruby-version:
         type: string
+permissions: {}
 
 jobs:
   rubocop:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.336.0
         with:
           bundler-cache: true
           ruby-version: ${{ inputs.ruby-version }}
-      - uses: r7kamura/rubocop-problem-matchers-action@v1
-      - run: bundle exec rubocop --parallel
+      - run: bundle exec rubocop --parallel --format progress --format github

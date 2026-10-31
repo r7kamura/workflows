@@ -1,11 +1,5 @@
 on:
   workflow_call:
-    inputs:
-      publish-gem:
-        description: Whether to publish the gem to RubyGems.org.
-        default: true
-        required: false
-        type: boolean
 
 permissions:
   contents: write
@@ -39,12 +33,12 @@ jobs:
           git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' tag -a "$tag" -m "Released version $current_version"
           git push origin "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
-      - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
+      - if: ${{ steps.new-version.outputs.tag }}
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ruby
-      - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
+      - if: ${{ steps.new-version.outputs.tag }}
         uses: rubygems/release-gem@v1
       - if: ${{ steps.new-version.outputs.tag }}
         uses: softprops/action-gh-release@v3

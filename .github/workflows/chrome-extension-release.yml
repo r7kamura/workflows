@@ -18,7 +18,7 @@ jobs:
           package-manager-cache: false
       - run: npm ci
       - run: npm run build
-      - uses: salsify/action-detect-and-tag-new-version@v2
+      - uses: r7kamura/workflows/.github/actions/detect-and-tag-new-version@main
         id: tag-new-version
         with:
           version-command: cat src/manifest.json | jq -r .version

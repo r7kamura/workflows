@@ -2,10 +2,13 @@ on:
   workflow_call:
     secrets:
       github-token: {}
+permissions: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7.0.1
         with:

@@ -3,10 +3,13 @@ on:
     inputs:
       ruby-version:
         type: string
+permissions: {}
 
 jobs:
   rspec:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: ruby/setup-ruby@v1.336.0

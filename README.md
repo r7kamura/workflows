@@ -4,20 +4,24 @@
 
 ## Usage
 
-This is an example to run RuboCop on Ruby project.
+This is an example to release a Ruby gem when its version is bumped.
 
 ```yaml
-name: rubocop
+name: release
 
 on:
-  pull_request:
   push:
     branches:
       - main
+    paths:
+      - lib/**/version.rb
 
 jobs:
-  rubocop:
-    uses: r7kamura/workflows/.github/workflows/ruby-rubocop.yml@main
+  release:
+    uses: r7kamura/workflows/.github/workflows/gem-release.yml@main
+    permissions:
+      contents: write
+      id-token: write
 ```
 
 See [.github/workflows](/.github/workflows) for more details.

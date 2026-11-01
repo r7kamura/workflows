@@ -17,11 +17,8 @@ jobs:
         id: tag-new-version
         with:
           version-command: cat src/manifest.json | jq -r .version
-      - uses: vimtor/action-zip@v1
-        with:
-          dest: dist.zip
-          files: dist/
-        if: ${{ steps.tag-new-version.outputs.tag }}
+      - if: ${{ steps.tag-new-version.outputs.tag }}
+        run: cd dist && zip -r ../dist.zip .
       - uses: softprops/action-gh-release@v1
         with:
           files: dist.zip

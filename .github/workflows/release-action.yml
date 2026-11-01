@@ -12,7 +12,7 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
-        run: gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --generate-notes
+        run: gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes
       - uses: actions/checkout@v7.0.1
       - name: Push HEAD to main version branch
         run: |

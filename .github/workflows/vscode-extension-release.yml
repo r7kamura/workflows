@@ -54,7 +54,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.detect.outputs.tag }}
-        run: gh release create "$TAG" --generate-notes
+        run: gh release create "$TAG" --title "$TAG" --generate-notes
       - if: ${{ steps.detect.outputs.tag }}
         env:
           VSCE_PAT: ${{ secrets.vsce-token }}

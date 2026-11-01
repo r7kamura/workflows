@@ -51,4 +51,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.new-version.outputs.tag }}
-        run: gh release create "$TAG" --generate-notes
+        run: gh release create "$TAG" --title "$TAG" --generate-notes

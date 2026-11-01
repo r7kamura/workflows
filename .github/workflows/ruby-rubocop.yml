@@ -15,5 +15,4 @@ jobs:
         with:
           bundler-cache: true
           ruby-version: ${{ inputs.ruby-version }}
-      - uses: r7kamura/rubocop-problem-matchers-action@v1
-      - run: bundle exec rubocop --parallel
+      - run: bundle exec rubocop --parallel --format progress --format github

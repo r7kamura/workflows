@@ -45,7 +45,7 @@ jobs:
           git push origin "refs/tags/$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - if: ${{ steps.detect.outputs.tag }}
-        run: zip -r dist.zip dist
+        run: cd dist && zip -r ../dist.zip .
       - if: ${{ steps.detect.outputs.tag }}
         env:
           GH_TOKEN: ${{ github.token }}

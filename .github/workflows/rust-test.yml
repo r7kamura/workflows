@@ -33,7 +33,7 @@ jobs:
             ~/.cargo/registry/index/
             target/
           key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
-      - uses: r7kamura/rust-problem-matchers@v1
+      - uses: r7kamura/rust-problem-matchers@v1.5.1
       - name: cargo fmt
         run: |-
           rustup component add rustfmt

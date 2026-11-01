@@ -15,7 +15,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 2
       - id: new-version
@@ -40,12 +40,12 @@ jobs:
           git push origin "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1.336.0
         with:
           bundler-cache: true
           ruby-version: ruby
       - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
-        uses: rubygems/release-gem@v1
+        uses: rubygems/release-gem@v1.4.1
       - if: ${{ steps.new-version.outputs.tag }}
         uses: softprops/action-gh-release@v3
         with:

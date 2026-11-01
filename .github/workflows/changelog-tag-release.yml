@@ -16,7 +16,8 @@ jobs:
         id: detect_tag
         with:
           version-command: ruby -e 'puts File.read("CHANGELOG.md")[/(\d+\.\d+\.\d+)/, 1] rescue ""'
-      - uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.detect_tag.outputs.tag }}
-        if: ${{ steps.detect_tag.outputs.tag }}
+      - if: ${{ steps.detect_tag.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.detect_tag.outputs.tag }}
+        run: gh release create "$TAG" --title "$TAG" --notes ""

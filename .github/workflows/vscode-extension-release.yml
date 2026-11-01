@@ -28,11 +28,11 @@ jobs:
         if: ${{ steps.tag-new-version.outputs.tag }}
       - run: npm run compile
         if: ${{ steps.tag-new-version.outputs.tag }}
-      - uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          tag_name: ${{ steps.tag-new-version.outputs.tag }}
-        if: ${{ steps.tag-new-version.outputs.tag }}
+      - if: ${{ steps.tag-new-version.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag-new-version.outputs.tag }}
+        run: gh release create "$TAG" --title "$TAG" --generate-notes
       - if: ${{ steps.tag-new-version.outputs.tag }}
         env:
           VSCE_PAT: ${{ secrets.vsce-token }}

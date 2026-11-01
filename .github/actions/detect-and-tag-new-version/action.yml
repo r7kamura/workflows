@@ -1,0 +1,46 @@
+name: Detect and tag new version
+description: Create and push a v{VERSION} tag when the version changes.
+inputs:
+  version-command:
+    description: Shell command that prints the current version.
+    required: true
+outputs:
+  previous-version:
+    description: Version at HEAD^.
+    value: ${{ steps.run.outputs.previous-version }}
+  current-version:
+    description: Version at HEAD.
+    value: ${{ steps.run.outputs.current-version }}
+  tag:
+    description: Created tag, or empty if no tag was created.
+    value: ${{ steps.run.outputs.tag }}
+runs:
+  using: composite
+  steps:
+    - id: run
+      shell: bash
+      env:
+        VERSION_COMMAND: ${{ inputs.version-command }}
+      run: |
+        current_version="$(sh -c "$VERSION_COMMAND")"
+        previous_version=""
+        if git rev-parse --verify --quiet HEAD^ > /dev/null; then
+          git worktree add --quiet --detach "$RUNNER_TEMP/previous" HEAD^
+          previous_version="$(cd "$RUNNER_TEMP/previous" && sh -c "$VERSION_COMMAND")" || previous_version=""
+          git worktree remove --force "$RUNNER_TEMP/previous"
+        fi
+        echo "Previous version: $previous_version"
+        echo "Current version: $current_version"
+        echo "previous-version=$previous_version" >> "$GITHUB_OUTPUT"
+        echo "current-version=$current_version" >> "$GITHUB_OUTPUT"
+        if [ -z "$current_version" ] || [ "$current_version" = "$previous_version" ]; then
+          exit 0
+        fi
+        tag="v$current_version"
+        if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+          echo "Tag $tag already exists."
+          exit 0
+        fi
+        git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' tag -a "$tag" -m "Released version $current_version"
+        git push origin "refs/tags/$tag"
+        echo "tag=$tag" >> "$GITHUB_OUTPUT"

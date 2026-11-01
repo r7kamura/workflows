@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 2
-      - uses: salsify/action-detect-and-tag-new-version@v2
+      - uses: r7kamura/workflows/.github/actions/detect-and-tag-new-version@main
         id: tag-new-version
         with:
           version-command: cat VERSION 2> /dev/null || true

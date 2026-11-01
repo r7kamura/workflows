@@ -4,20 +4,24 @@
 
 ## Usage
 
-This is an example to run tests on Rust project.
+This is an example to release a Ruby gem when its version is bumped.
 
 ```yaml
-name: test
+name: release
 
 on:
-  pull_request:
   push:
     branches:
       - main
+    paths:
+      - lib/**/version.rb
 
 jobs:
-  test:
-    uses: r7kamura/workflows/.github/workflows/rust-test.yml@main
+  release:
+    uses: r7kamura/workflows/.github/workflows/gem-release.yml@main
+    permissions:
+      contents: write
+      id-token: write
 ```
 
 See [.github/workflows](/.github/workflows) for more details.

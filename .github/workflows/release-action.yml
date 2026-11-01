@@ -1,9 +1,13 @@
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: softprops/action-gh-release@v1
         env:

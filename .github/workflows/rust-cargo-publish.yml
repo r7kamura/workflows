@@ -4,9 +4,13 @@ on:
       cargo-registry-token:
         required: true
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - run: cargo publish

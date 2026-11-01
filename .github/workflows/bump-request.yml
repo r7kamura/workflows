@@ -8,9 +8,14 @@ on:
         required: true
         type: string
 
+permissions: {}
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
       - uses: r7kamura/bump-request@v0

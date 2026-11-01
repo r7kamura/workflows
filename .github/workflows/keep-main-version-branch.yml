@@ -1,9 +1,13 @@
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
       - name: Push HEAD to main version branch

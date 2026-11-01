@@ -3,10 +3,13 @@ on:
     inputs:
       ruby-version:
         type: string
+permissions: {}
 
 jobs:
   rubocop:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
         with:

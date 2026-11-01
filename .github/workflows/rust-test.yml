@@ -27,6 +27,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
       - uses: chetan/git-restore-mtime-action@v1.1
       - uses: actions/cache@v6.1.0
         with:

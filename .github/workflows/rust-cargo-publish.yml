@@ -13,6 +13,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
       - run: cargo publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.cargo-registry-token }}

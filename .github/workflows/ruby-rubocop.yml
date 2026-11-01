@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ruby/setup-ruby@v1.336.0
         with:

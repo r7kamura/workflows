@@ -9,11 +9,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          generate_release_notes: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes
       - uses: actions/checkout@v7.0.1
       - name: Push HEAD to main version branch
         run: |

@@ -48,7 +48,7 @@ jobs:
       - if: ${{ steps.new-version.outputs.tag && inputs.publish-gem }}
         uses: rubygems/release-gem@v1.4.1
       - if: ${{ steps.new-version.outputs.tag }}
-        uses: softprops/action-gh-release@v3
-        with:
-          generate_release_notes: true
-          tag_name: ${{ steps.new-version.outputs.tag }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.new-version.outputs.tag }}
+        run: gh release create "$TAG" --title "$TAG" --generate-notes

@@ -15,9 +15,10 @@ jobs:
         id: tag-new-version
         with:
           version-command: cat package.json | jq -r .version
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: 22
+          package-manager-cache: false
         if: ${{ steps.tag-new-version.outputs.tag }}
       - run: npm ci
         if: ${{ steps.tag-new-version.outputs.tag }}

@@ -4,10 +4,10 @@
 
 ## Usage
 
-This is an example to run tests on Rust project.
+This is an example to run RuboCop on Ruby project.
 
 ```yaml
-name: test
+name: rubocop
 
 on:
   pull_request:
@@ -16,8 +16,8 @@ on:
       - main
 
 jobs:
-  test:
-    uses: r7kamura/workflows/.github/workflows/rust-test.yml@main
+  rubocop:
+    uses: r7kamura/workflows/.github/workflows/ruby-rubocop.yml@main
 ```
 
 See [.github/workflows](/.github/workflows) for more details.

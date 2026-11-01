@@ -11,7 +11,7 @@ jobs:
       - uses: salsify/action-detect-and-tag-new-version@v2
         id: tag-new-version
         with:
-          version-command: cat VERSION
+          version-command: cat VERSION 2> /dev/null || true
       - uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true

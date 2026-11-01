@@ -8,9 +8,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 2
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: 20
+          package-manager-cache: false
       - run: npm ci
       - run: npm run build
       - uses: salsify/action-detect-and-tag-new-version@v2
